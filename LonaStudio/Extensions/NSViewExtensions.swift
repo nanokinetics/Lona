@@ -9,6 +9,68 @@
 import Foundation
 import Cocoa
 
+func saveImage(_ image: CVPixelBuffer) -> Data? {
+    let imageRep = NSCIImageRep(ciImage: CIImage(cvPixelBuffer: image, options: nil))
+    let image = NSImage(size: imageRep.size)
+    image.addRepresentation(imageRep)
+
+    guard let bitmapData = image.tiffRepresentation else {
+        Swift.print("Failed to convert to tiff")
+        return nil
+    }
+
+    guard let bitmapRep = NSBitmapImageRep(data: bitmapData) else {
+        Swift.print("Failed to create NSBitmapImageRep")
+        return nil
+    }
+
+    let imageData = bitmapRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
+
+    return imageData
+}
+
+func saveImage(_ image: CIImage) -> Data? {
+    let imageRep = NSCIImageRep(ciImage: image)
+    let image = NSImage(size: imageRep.size)
+    image.addRepresentation(imageRep)
+
+    guard let bitmapData = image.tiffRepresentation else {
+        Swift.print("Failed to convert to tiff")
+        return nil
+    }
+
+    guard let bitmapRep = NSBitmapImageRep(data: bitmapData) else {
+        Swift.print("Failed to create NSBitmapImageRep")
+        return nil
+    }
+
+    let imageData = bitmapRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:])
+
+    return imageData
+}
+
+//func toPixelBuffer(_ image: CIImage) -> CVPixelBuffer {
+//    guard let graphicsContext = NSGraphicsContext(bitmapImageRep: bitmapRep) else { return nil }
+//
+//    NSGraphicsContext.saveGraphicsState()
+//    NSGraphicsContext.current = graphicsContext
+//
+//    graphicsContext.cgContext.scaleBy(x: scale, y: scale)
+//    displayIgnoringOpacity(bounds, in: graphicsContext)
+//
+//    NSGraphicsContext.restoreGraphicsState()
+//
+//}
+
+
+//extension Data {
+//    func pixelBuffer() -> CVPixelBuffer {
+//        let ciImage = CIImage(data: self)
+//
+//
+//    }
+//}
+
 public extension NSView {
 
     static func placeholder(ofSize size: CGFloat, withColor color: CGColor = CGColor.clear) -> NSView {
@@ -171,7 +233,97 @@ public extension NSView {
 //        return rep.representation(using: .PNG, properties: [:])
 //    }
 
+    func pixelBuffer(scaledBy scale: CGFloat = 1) -> CVPixelBuffer? {
+        let width = Int(scale * bounds.size.width)
+        let height = Int(scale * bounds.size.height)
+
+        func allocatePixelBuffer() -> CVPixelBuffer? {
+            let attrs = [
+                kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue
+                ] as CFDictionary
+
+            var pixelBuffer: CVPixelBuffer?
+            let status = CVPixelBufferCreate(
+                kCFAllocatorDefault,
+                width,
+                height,
+                kCVPixelFormatType_32ARGB,
+                attrs,
+                &pixelBuffer
+            )
+
+            return status == kCVReturnSuccess ? pixelBuffer : nil
+        }
+
+        guard let bitmapRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: width,
+            pixelsHigh: height,
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: NSColorSpaceName.calibratedRGB,
+            bitmapFormat: NSBitmapImageRep.Format(rawValue: 0),
+            bytesPerRow: 4 * width,
+            bitsPerPixel: 32
+            ) else { return nil }
+
+        guard let graphicsContext = NSGraphicsContext(bitmapImageRep: bitmapRep) else { return nil }
+
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = graphicsContext
+
+        graphicsContext.cgContext.scaleBy(x: scale, y: scale)
+        displayIgnoringOpacity(bounds, in: graphicsContext)
+
+        let pixelBuffer = allocatePixelBuffer()!
+        let image = CIImage(bitmapImageRep: bitmapRep)!
+        graphicsContext.ciContext!.render(image, to: pixelBuffer)
+
+        NSGraphicsContext.restoreGraphicsState()
+
+        return pixelBuffer
+    }
+
+    func ciImage(scaledBy scale: CGFloat = 1) -> CIImage? {
+        let width = Int(scale * bounds.size.width)
+        let height = Int(scale * bounds.size.height)
+
+        guard let bitmapRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: width,
+            pixelsHigh: height,
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: NSColorSpaceName.calibratedRGB,
+            bitmapFormat: NSBitmapImageRep.Format(rawValue: 0),
+            bytesPerRow: 4 * width,
+            bitsPerPixel: 32
+            ) else { return nil }
+
+        guard let graphicsContext = NSGraphicsContext(bitmapImageRep: bitmapRep) else { return nil }
+
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = graphicsContext
+
+        graphicsContext.cgContext.scaleBy(x: scale, y: scale)
+        displayIgnoringOpacity(bounds, in: graphicsContext)
+
+        NSGraphicsContext.restoreGraphicsState()
+
+        return CIImage(bitmapImageRep: bitmapRep)
+    }
+
     func dataRepresentation(scaledBy scale: CGFloat = 1) -> Data? {
+
+//        return saveImage(ciImage(scaledBy: scale)!)
+
+        return saveImage(pixelBuffer(scaledBy: scale)!)
+
         let width = Int(scale * bounds.size.width)
         let height = Int(scale * bounds.size.height)
 
@@ -242,7 +394,7 @@ public extension NSView {
         ) else { return nil }
 
         context.scaleBy(x: scale, y: scale)
-        layer?.render(in: context)
+        layer!.render(in: context) // TODO: This is probably the issue
 
         CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
 

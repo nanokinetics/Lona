@@ -158,7 +158,8 @@ class VideoUtils {
 
             animationView.animationProgress = progress
             animationView.layout()
-            guard let buffer = view.pixelBufferRepresentation(scaledBy: scale) else { continue }
+            guard let buffer = view.pixelBuffer(scaledBy: scale) else { continue }
+//            guard let buffer = view.pixelBufferRepresentation(scaledBy: scale) else { continue }
 
             frames.append(buffer)
         }
