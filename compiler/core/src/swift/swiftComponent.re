@@ -256,6 +256,7 @@ let generate =
         })
       ],
       "failable": Some("?"),
+      "throws": false,
       "body": [
         FunctionCallExpression({
           "name": SwiftIdentifier("fatalError"),
@@ -274,6 +275,7 @@ let generate =
       "modifiers": [AccessLevelModifier(PublicModifier)],
       "parameters": parameters |> List.map(initParameterDoc),
       "failable": None,
+      "throws": false,
       "body":
         Document.joinGroups(
           Empty,
@@ -444,6 +446,7 @@ let generate =
       "modifiers": [AccessLevelModifier(PrivateModifier)],
       "parameters": [],
       "result": None,
+      "throws": false,
       "body":
         Document.joinGroups(
           Empty,
@@ -740,6 +743,7 @@ let generate =
       "modifiers": [AccessLevelModifier(PrivateModifier)],
       "parameters": [],
       "result": None,
+      "throws": false,
       "body":
         List.concat([
           root |> Layer.flatmap(translatesAutoresizingMask),
@@ -785,6 +789,7 @@ let generate =
       "modifiers": [AccessLevelModifier(PrivateModifier)],
       "parameters": [],
       "result": None,
+      "throws": false,
       "body":
         (
           assignments

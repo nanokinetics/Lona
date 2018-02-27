@@ -99,80 +99,92 @@ function prefixExpression(param_0) {
   return /* PrefixExpression */Block.__(3, [param_0]);
 }
 
+function tryExpression(param_0) {
+  return /* TryExpression */Block.__(4, [param_0]);
+}
+
 function classDeclaration(param_0) {
-  return /* ClassDeclaration */Block.__(4, [param_0]);
+  return /* ClassDeclaration */Block.__(5, [param_0]);
 }
 
 function enumDeclaration(param_0) {
-  return /* EnumDeclaration */Block.__(5, [param_0]);
+  return /* EnumDeclaration */Block.__(6, [param_0]);
+}
+
+function extensionDeclaration(param_0) {
+  return /* ExtensionDeclaration */Block.__(7, [param_0]);
 }
 
 function swiftIdentifier(param_0) {
-  return /* SwiftIdentifier */Block.__(6, [param_0]);
+  return /* SwiftIdentifier */Block.__(8, [param_0]);
 }
 
 function constantDeclaration(param_0) {
-  return /* ConstantDeclaration */Block.__(7, [param_0]);
+  return /* ConstantDeclaration */Block.__(9, [param_0]);
 }
 
 function variableDeclaration(param_0) {
-  return /* VariableDeclaration */Block.__(8, [param_0]);
+  return /* VariableDeclaration */Block.__(10, [param_0]);
 }
 
 function initializerDeclaration(param_0) {
-  return /* InitializerDeclaration */Block.__(9, [param_0]);
+  return /* InitializerDeclaration */Block.__(11, [param_0]);
 }
 
 function functionDeclaration(param_0) {
-  return /* FunctionDeclaration */Block.__(10, [param_0]);
+  return /* FunctionDeclaration */Block.__(12, [param_0]);
 }
 
 function importDeclaration(param_0) {
-  return /* ImportDeclaration */Block.__(11, [param_0]);
+  return /* ImportDeclaration */Block.__(13, [param_0]);
 }
 
 function ifStatement(param_0) {
-  return /* IfStatement */Block.__(12, [param_0]);
+  return /* IfStatement */Block.__(14, [param_0]);
 }
 
 function returnStatement(param_0) {
-  return /* ReturnStatement */Block.__(13, [param_0]);
+  return /* ReturnStatement */Block.__(15, [param_0]);
 }
 
 function parameter(param_0) {
-  return /* Parameter */Block.__(14, [param_0]);
+  return /* Parameter */Block.__(16, [param_0]);
 }
 
 function functionCallArgument(param_0) {
-  return /* FunctionCallArgument */Block.__(15, [param_0]);
+  return /* FunctionCallArgument */Block.__(17, [param_0]);
 }
 
 function functionCallExpression(param_0) {
-  return /* FunctionCallExpression */Block.__(16, [param_0]);
+  return /* FunctionCallExpression */Block.__(18, [param_0]);
+}
+
+function enumCase(param_0) {
+  return /* EnumCase */Block.__(19, [param_0]);
 }
 
 function lineComment(param_0) {
-  return /* LineComment */Block.__(17, [param_0]);
+  return /* LineComment */Block.__(20, [param_0]);
 }
 
 function docComment(param_0) {
-  return /* DocComment */Block.__(18, [param_0]);
+  return /* DocComment */Block.__(21, [param_0]);
 }
 
 function lineEndComment(param_0) {
-  return /* LineEndComment */Block.__(19, [param_0]);
+  return /* LineEndComment */Block.__(22, [param_0]);
 }
 
 function codeBlock(param_0) {
-  return /* CodeBlock */Block.__(20, [param_0]);
+  return /* CodeBlock */Block.__(23, [param_0]);
 }
 
 function statementListHelper(param_0) {
-  return /* StatementListHelper */Block.__(21, [param_0]);
+  return /* StatementListHelper */Block.__(24, [param_0]);
 }
 
 function topLevelDeclaration(param_0) {
-  return /* TopLevelDeclaration */Block.__(22, [param_0]);
+  return /* TopLevelDeclaration */Block.__(25, [param_0]);
 }
 
 var privateModifier = /* PrivateModifier */0;
@@ -276,8 +288,10 @@ exports.literalExpression      = literalExpression;
 exports.memberExpression       = memberExpression;
 exports.binaryExpression       = binaryExpression;
 exports.prefixExpression       = prefixExpression;
+exports.tryExpression          = tryExpression;
 exports.classDeclaration       = classDeclaration;
 exports.enumDeclaration        = enumDeclaration;
+exports.extensionDeclaration   = extensionDeclaration;
 exports.swiftIdentifier        = swiftIdentifier;
 exports.constantDeclaration    = constantDeclaration;
 exports.variableDeclaration    = variableDeclaration;
@@ -289,6 +303,7 @@ exports.returnStatement        = returnStatement;
 exports.parameter              = parameter;
 exports.functionCallArgument   = functionCallArgument;
 exports.functionCallExpression = functionCallExpression;
+exports.enumCase               = enumCase;
 exports.empty                  = empty;
 exports.lineComment            = lineComment;
 exports.docComment             = docComment;

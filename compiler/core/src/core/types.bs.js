@@ -3,6 +3,25 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 
+function reference(param_0) {
+  return /* Reference */Block.__(0, [param_0]);
+}
+
+function named(param_0, param_1) {
+  return /* Named */Block.__(1, [
+            param_0,
+            param_1
+          ]);
+}
+
+function referenceFromJs(ltype) {
+  if (ltype.tag) {
+    return /* None */0;
+  } else {
+    return /* Some */[ltype[0]];
+  }
+}
+
 var stringType = /* Reference */Block.__(0, ["String"]);
 
 var colorType = /* Named */Block.__(1, [
@@ -20,14 +39,35 @@ var urlType = /* Named */Block.__(1, [
     stringType
   ]);
 
+function parameterToJs(param) {
+  return {
+          name: param[/* name */0],
+          ltype: param[/* ltype */1],
+          defaultValue: param[/* defaultValue */2]
+        };
+}
+
+function parameterFromJs(param) {
+  return /* record */[
+          /* name */param.name,
+          /* ltype */param.ltype,
+          /* defaultValue */param.defaultValue
+        ];
+}
+
 var booleanType = /* Reference */Block.__(0, ["Boolean"]);
 
 var numberType = /* Reference */Block.__(0, ["Number"]);
 
-exports.booleanType   = booleanType;
-exports.numberType    = numberType;
-exports.stringType    = stringType;
-exports.colorType     = colorType;
-exports.textStyleType = textStyleType;
-exports.urlType       = urlType;
+exports.reference       = reference;
+exports.named           = named;
+exports.referenceFromJs = referenceFromJs;
+exports.booleanType     = booleanType;
+exports.numberType      = numberType;
+exports.stringType      = stringType;
+exports.colorType       = colorType;
+exports.textStyleType   = textStyleType;
+exports.urlType         = urlType;
+exports.parameterToJs   = parameterToJs;
+exports.parameterFromJs = parameterFromJs;
 /* No side effect */
